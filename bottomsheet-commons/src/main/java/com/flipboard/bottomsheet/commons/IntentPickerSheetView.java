@@ -59,12 +59,6 @@ public class IntentPickerSheetView extends FrameLayout {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        for (ActivityInfo activityInfo : adapter.activityInfos) {
-            if (activityInfo.iconLoadTask != null) {
-                activityInfo.iconLoadTask.cancel(true);
-                activityInfo.iconLoadTask = null;
-            }
-        }
     }
 
     /**
@@ -75,7 +69,6 @@ public class IntentPickerSheetView extends FrameLayout {
         public final String label;
         public final ComponentName componentName;
         public final ResolveInfo resolveInfo;
-        private AsyncTask<Void, Void, Drawable> iconLoadTask;
         public Object tag;
 
         public ActivityInfo(Drawable icon, String label, Context context, Class<?> clazz) {
@@ -230,28 +223,11 @@ public class IntentPickerSheetView extends FrameLayout {
             }
 
             final ActivityInfo info = activityInfos.get(position);
-            if (info.iconLoadTask != null) {
-                info.iconLoadTask.cancel(true);
-                info .iconLoadTask = null;
-            }
             if (info.icon != null) {
                 holder.icon.setImageDrawable(info.icon);
             } else {
                 holder.icon.setImageDrawable(getResources().getDrawable(R.color.divider_gray));
-                info.iconLoadTask = new AsyncTask<Void, Void, Drawable>() {
-                    @Override
-                    protected Drawable doInBackground(@NonNull Void... params) {
-                        return info.resolveInfo.loadIcon(packageManager);
-                    }
-
-                    @Override
-                    protected void onPostExecute(@NonNull Drawable drawable) {
-                        info.icon = drawable;
-                        info.iconLoadTask = null;
-                        holder.icon.setImageDrawable(drawable);
-                    }
-                };
-                info.iconLoadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                info.resolveInfo.loadIcon(packageManager);
             }
             holder.label.setText(info.label);
 
