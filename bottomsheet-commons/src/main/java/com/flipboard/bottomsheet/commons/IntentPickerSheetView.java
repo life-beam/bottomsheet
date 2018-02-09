@@ -223,7 +223,7 @@ public class IntentPickerSheetView extends FrameLayout {
             }
 
             final ActivityInfo info = activityInfos.get(position);
-            holder.icon.setImageDrawable(info.icon);
+            holder.icon.setImageDrawable(info.resolveInfo.loadIcon(packageManager));
             holder.label.setText(info.label);
 
             return convertView;
