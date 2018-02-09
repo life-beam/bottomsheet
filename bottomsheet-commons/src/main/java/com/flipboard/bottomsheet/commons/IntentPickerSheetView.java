@@ -251,7 +251,7 @@ public class IntentPickerSheetView extends FrameLayout {
                         holder.icon.setImageDrawable(drawable);
                     }
                 };
-                info.iconLoadTask.execute();
+                info.iconLoadTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
             holder.label.setText(info.label);
 
