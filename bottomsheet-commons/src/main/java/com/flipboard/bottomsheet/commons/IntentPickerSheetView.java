@@ -130,7 +130,7 @@ public class IntentPickerSheetView extends FrameLayout {
     public void setFilter(Filter filter) {
         this.filter = filter;
     }
-    
+
     public void setColumnWidthDp(int columnWidthDp) {
         this.columnWidthDp = columnWidthDp;
     }
@@ -223,12 +223,7 @@ public class IntentPickerSheetView extends FrameLayout {
             }
 
             final ActivityInfo info = activityInfos.get(position);
-            if (info.icon != null) {
-                holder.icon.setImageDrawable(info.icon);
-            } else {
-                holder.icon.setImageDrawable(getResources().getDrawable(R.color.divider_gray));
-                info.resolveInfo.loadIcon(packageManager);
-            }
+            holder.icon.setImageDrawable(info.icon);
             holder.label.setText(info.label);
 
             return convertView;
