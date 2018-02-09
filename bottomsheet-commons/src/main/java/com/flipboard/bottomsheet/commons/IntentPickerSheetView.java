@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -186,8 +185,10 @@ public class IntentPickerSheetView extends FrameLayout {
             activityInfos = new ArrayList<>(infos.size() + mixins.size());
             activityInfos.addAll(mixins);
             for (ResolveInfo info : infos) {
+                Drawable icon = info.loadIcon(packageManager);
                 ComponentName componentName = new ComponentName(info.activityInfo.packageName, info.activityInfo.name);
                 ActivityInfo activityInfo = new ActivityInfo(info, info.loadLabel(packageManager), componentName);
+                activityInfo.icon = icon;
                 if (filter.include(activityInfo)) {
                     activityInfos.add(activityInfo);
                 }
@@ -223,7 +224,7 @@ public class IntentPickerSheetView extends FrameLayout {
             }
 
             final ActivityInfo info = activityInfos.get(position);
-            holder.icon.setImageDrawable(info.resolveInfo.loadIcon(packageManager));
+            holder.icon.setImageDrawable(info.icon);
             holder.label.setText(info.label);
 
             return convertView;
